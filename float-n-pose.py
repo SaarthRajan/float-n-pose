@@ -17,10 +17,27 @@ local_css("Styles/styles.css")
 
 st.title("Float n Pose")
 
+def leaderboard() :
+    # Dummy Leaderboard Data - initialise to empty dictionary when
+    # Contains in form of key value pairs of username and score 
+    # To Do - store it in a panda data frame and then display it after sorting
+    leaderboard = {
+        "User1": 10,
+        "User2": 20,
+        "User3": 40,
+        "User4": 5,
+        "User5": 60,
+    }
 
-# Webcam Test
-def main() :
+    st.header("Leaderboard")
 
+    # Print the leaderboard
+    for user in leaderboard :
+        st.write(user + ": " + str(leaderboard[user]))
+
+
+def webcam() :
+    
     # Initialise cap - Captures video frames from webcam 0. 
     cap = cv2.VideoCapture(0)
 
@@ -49,6 +66,18 @@ def main() :
     # release and destroy (destructor)
     cap.release()
     cv2.destroyAllWindows()
+
+
+# Webcam Test
+def main() :
+    col1, col2 = st.columns([4, 2], gap="large", vertical_alignment="center")
+
+    with col2 :
+        leaderboard()
+    
+    with col1 :
+        webcam()
+
 
 if __name__ == "__main__" :
     main()
