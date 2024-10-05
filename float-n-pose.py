@@ -20,18 +20,33 @@ st.title("Float n Pose")
 
 # Webcam Test
 def main() :
+
+    # Initialise cap - Captures video frames from webcam 0. 
     cap = cv2.VideoCapture(0)
+
+    # Empty Frame for storing webcam feed. 
     frame_placeholder = st.empty()
+
+    # button to stop the feed - change later
     stop_button_pressed = st.button("Stop")
+
+    # Feed is accessed till in this loop
     while cap.isOpened() and not stop_button_pressed:
         ret, frame = cap.read()
+
+        # End the Video Capture
         if not ret:
             st.write("Video Capture Ended")
             break
+        
+        # convert to RGB format - supported by streamlit and display it
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         frame_placeholder.image(frame,channels="RGB")
+
         if cv2.waitKey(1) & 0xFF == ord("q") or stop_button_pressed:
             break
+    
+    # release and destroy (destructor)
     cap.release()
     cv2.destroyAllWindows()
 
