@@ -15,7 +15,7 @@ def local_css(file_name):
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 local_css("Styles/styles.css")
 
-st.title("Float n Pose")
+st.title(":blue[Float n Pose]")
 
 def leaderboard() :
     # Dummy Leaderboard Data - initialise to empty dictionary when
@@ -29,14 +29,22 @@ def leaderboard() :
         "User5": 60,
     }
 
+    sortedLeaderBoard = sorted(leaderboard.items(), key=lambda x:x[1], reverse=True)
+
     st.header("Leaderboard")
 
     # Print the leaderboard
-    for user in leaderboard :
-        st.write(user + ": " + str(leaderboard[user]))
+    for user in sortedLeaderBoard :
+        # st.write(user + ": " + str(leaderboard[user]))
+        cols = st.columns(2)
+        cols[0].write(user[0])
+        cols[1].write(str(user[1]))
+
 
 
 def webcam() :
+
+    st.header("Webcam")
     
     # Initialise cap - Captures video frames from webcam 0. 
     cap = cv2.VideoCapture(0)
