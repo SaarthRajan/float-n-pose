@@ -6,7 +6,7 @@ float n pose !!
 ### 1. Git Clone
 Clone the repository in your local machine using the following command
 
-https://github.com/SaarthRajan/float-n-pose.git
+git clone https://github.com/SaarthRajan/float-n-pose.git
 
 ### 2. Install requirements
 Go into the float-n-pose directory and install the requirements using the following command
