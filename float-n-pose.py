@@ -1,5 +1,6 @@
 import streamlit as st
 import cv2
+import os
 
 # This is the homepage of the website
 
@@ -20,7 +21,7 @@ st.title(":blue[Float n Pose]")
 # Dummy Leaderboard Data - initialise to empty dictionary when
 # Contains in form of key value pairs of username and score 
 # To Do - store it in a panda data frame and then display it after sorting
-leaderboard = {
+leaderboard_dict = {
     "User1": 10,
     "User2": 20,
     "User3": 40,
@@ -28,12 +29,13 @@ leaderboard = {
     "User5": 60,
 }
 
-def controls() :
-    pass
+image_directory = "./images"
+image_path = "./images/temp.jpg"
+image_name = "temp.jpg"
 
 def leaderboard() :
 
-    sortedLeaderBoard = sorted(leaderboard.items(), key=lambda x:x[1], reverse=True)
+    sortedLeaderBoard = sorted(leaderboard_dict.items(), key=lambda x:x[1], reverse=True)
 
     st.header("Leaderboard")
 
@@ -48,6 +50,8 @@ def leaderboard() :
 
 def webcam() :
 
+    captured = False
+
     st.header("Webcam")
     
     # Initialise cap - Captures video frames from webcam 0. 
@@ -56,11 +60,11 @@ def webcam() :
     # Empty Frame for storing webcam feed. 
     frame_placeholder = st.empty()
 
-    # button to stop the feed - change later
-    stop_button_pressed = st.button("Stop")
+    # Capture Button
+    capture_button = st.button("Capture")
 
     # Feed is accessed till in this loop
-    while cap.isOpened() and not stop_button_pressed:
+    while cap.isOpened():
         ret, frame = cap.read()
 
         # End the Video Capture
@@ -72,13 +76,21 @@ def webcam() :
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         frame_placeholder.image(frame,channels="RGB")
 
-        if cv2.waitKey(1) & 0xFF == ord("q") or stop_button_pressed:
+        if capture_button :
+            os.chdir(image_directory)
+            cv2.imwrite(image_name, frame)
+            captured = True
+            os.chdir("../")
+            break
+
+        if cv2.waitKey(1) & 0xFF == ord("q"):
             break
     
     # release and destroy (destructor)
     cap.release()
     cv2.destroyAllWindows()
-
+    if captured :
+        st.switch_page("pages/confirmImage.py")
 
 # Webcam Test
 def main() :
