@@ -32,6 +32,7 @@ st.header("Do you want to upload this?")
 
 def confirmImage(path):
     
+    username = ""
         
     # initialise 2 columns with ration 3:2
     cols = st.columns([3, 2], gap="large")
@@ -45,10 +46,12 @@ def confirmImage(path):
     # displays the details the user has to enter
     with cols[1] :
         if info.theme == "" :
+            username = "Host"
             hint = st.text_input("Give a hint to other players")
             info.theme = hint
-            
-        username = st.text_input("Enter Your Name Here")
+        else :
+            username = st.text_input("Enter Your Name Here")
+
         insideColumns = st.columns(2)
         with insideColumns[0] :
             retake_button = st.button("Retake", type="secondary")
@@ -67,8 +70,9 @@ def confirmImage(path):
                     leaderboard_dict[username] = 0 # initialise leaderboard
 
                 st.switch_page("float_n_pose.py")
+                
             else :
-                st.write("Kindly Enter the username")
+                st.write("Kindly Enter the username and/or hint")
 
         if retake_button:
 

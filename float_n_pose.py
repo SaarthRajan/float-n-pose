@@ -1,6 +1,5 @@
 import streamlit as st
 import cv2
-import os
 import time
 import numpy as np
 from info import leaderboard_dict
