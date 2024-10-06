@@ -46,7 +46,7 @@ def confirmImage(path):
     # displays the details the user has to enter
     with cols[1] :
         if info.theme == "" :
-            username = "Host"
+            username = "host"
             hint = st.text_input("Give a hint to other players")
             info.theme = hint
         else :
@@ -70,7 +70,7 @@ def confirmImage(path):
                     leaderboard_dict[username] = 0 # initialise leaderboard
 
                 st.switch_page("float_n_pose.py")
-                
+
             else :
                 st.write("Kindly Enter the username and/or hint")
 

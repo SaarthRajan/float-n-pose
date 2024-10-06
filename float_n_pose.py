@@ -45,6 +45,11 @@ def leaderboard() :
         cols = st.columns(2)
         cols[0].write(user[0])
         cols[1].write(str(user[1]))
+    
+    get_results = st.button("Get Results", type="secondary")
+
+    if get_results :
+        pass
 
 # Currently: Countdown for error handling - will later implement it for countdown before capture
 def countdown():
