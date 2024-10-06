@@ -1,9 +1,11 @@
 import streamlit as st
+import os
 
 # Set Page Config -> title, logo, layout (centred by default)
 st.set_page_config(
     page_title="Float n Pose", 
-    page_icon="🪐"
+    page_icon="🪐",
+    initial_sidebar_state="collapsed"
 )
 
 # Used to remove the streamlit branding
@@ -11,8 +13,6 @@ def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 local_css("Styles/styles.css")
-
-image_directory = "./images"
 
 def confirmImage(path):
 
@@ -29,7 +29,13 @@ def confirmImage(path):
         #     st.image(path)
         # else :
         #     st.image("./images/Sample.png")
-        st.image("./images/temp.png", channels="BGR")
+        # if os.path.exists(path):
+        # st.image(path, channels="BGR")
+
+        image_holder = st.empty()
+
+        image_holder.image(path, channels="BGR")
+        
 
     # displays the details the user has to enter
     with cols[1] :
@@ -48,24 +54,17 @@ def confirmImage(path):
                 # st.switch_page("float-n-pose.py")
             else :
                 st.write("Kindly Enter the username")
-        elif retake_button:
-            st.write("You are not choosing this image")
-            # os.chdir(image_directory)
-            # os.remove("temp.jpg")
-            # st.switch_page("float-n-pose.py")
 
-        # while (not confirm_button and not retake_button):
-        #     if confirm_button :
-        #         if username :
-        #             st.write(f"Username is {username}")
-        #             st.switch_page("float-n-pose.py")
-        #         else :
-        #             st.write("Kindly Enter the username")
-        #     elif retake_button:
-        #         os.chdir(image_directory)
-        #         os.remove("temp.jpg")
-        #         st.switch_page("float-n-pose.py")
+        if retake_button:
+
+            st.write("You are not choosing this image")
+            
+            if os.path.exists(path):
+                os.remove(path)
+            
+            st.switch_page("float_n_pose.py")
+
         
 
 
-confirmImage("images/temp.png")
+confirmImage("./images/temp.png")

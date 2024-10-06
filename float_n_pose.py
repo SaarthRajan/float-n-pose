@@ -1,13 +1,15 @@
 import streamlit as st
 import cv2
 import os
+import time
 
-# This is the homepage of the website
+# pg = st.navigation([st.Page("pages\confirm_image.py")], position="hidden")
 
 # Set Page Config -> title, logo, layout (centred by default)
 st.set_page_config(
     page_title="Float n Pose", 
-    page_icon="🪐"
+    page_icon="🪐",
+    initial_sidebar_state="collapsed"
 )
 
 # Used to remove the streamlit branding
@@ -46,7 +48,11 @@ def leaderboard() :
         cols[0].write(user[0])
         cols[1].write(str(user[1]))
 
-
+def countdown():
+    with st.empty() :
+        for i in range(1, 4) :
+            st.header(str(i))
+            time.sleep(1)
 
 def webcam() :
 
@@ -65,6 +71,11 @@ def webcam() :
 
     # Feed is accessed till in this loop
     while cap.isOpened():
+
+        if os.path.exists(image_path):
+            os.remove(image_path)
+
+        
         ret, frame = cap.read()
 
         # End the Video Capture
@@ -77,24 +88,35 @@ def webcam() :
         frame_placeholder.image(frame_new)
 
         if capture_button :
-            os.chdir(image_directory)
-            cv2.imwrite(image_name, frame)
+
+            if os.path.exists(image_path):
+                os.remove(image_path)
+
+            countdown()
+
+            if os.path.exists(image_path):
+                os.remove(image_path)
+
+            cv2.imwrite(image_path, frame)
+
             captured = True
-            os.chdir("../")
+            
             break
 
-        if cv2.waitKey(1) & 0xFF == ord("q"):
-            break
+        # if cv2.waitKey(1) & 0xFF == ord("q"):
+        #     break
     
     # release and destroy (destructor)
     cap.release()
     cv2.destroyAllWindows()
+
     if captured :
-        st.switch_page("pages/confirmImage.py")
+        st.switch_page("pages/confirm_image.py")
+
 
 # Webcam Test
 def main() :
-    col1, col2 = st.columns([4, 2], gap="large", vertical_alignment="center")
+    col1, col2 = st.columns([2, 1], gap="large", vertical_alignment="center")
 
     with col2 :
         leaderboard()
