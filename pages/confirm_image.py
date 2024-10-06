@@ -31,8 +31,6 @@ st.title(":blue[Float n Pose 🧑🏼‍🚀]")
 st.header("Do you want to upload this?")
 
 def confirmImage(path):
-    
-    username = ""
         
     # initialise 2 columns with ration 3:2
     cols = st.columns([3, 2], gap="large")
@@ -41,14 +39,17 @@ def confirmImage(path):
     with cols[0] :
         with st.empty() :
             st.image(path, channels="RGB")
-        
+    
+    username = "host"
 
     # displays the details the user has to enter
     with cols[1] :
         if info.theme == "" :
+            for file in os.listdir(image_directory) :
+                if 'temp' not in file :
+                    os.remove(f"{image_directory}{file}")
             username = "host"
-            hint = st.text_input("Give a hint to other players")
-            info.theme = hint
+            info.theme = st.text_input("Give a hint to other players")
         else :
             username = st.text_input("Enter Your Name Here")
 
@@ -62,6 +63,8 @@ def confirmImage(path):
         if confirm_button :
             if username and info.theme:
                 st.write(f"Username is {username}")
+
+                # storing it as jpg in images directory
                 temp_image_path = tempfile.NamedTemporaryFile(delete=False, suffix='.jpg').name
                 shutil.move(path, temp_image_path)
                 os.rename(temp_image_path, f"{image_directory}{username}.jpg")

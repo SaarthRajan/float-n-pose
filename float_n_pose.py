@@ -4,6 +4,7 @@ import time
 import numpy as np
 from info import leaderboard_dict
 from info import theme
+import score_checker
 
 
 # pg = st.navigation([st.Page("pages\confirm_image.py")], position="hidden")
@@ -48,8 +49,9 @@ def leaderboard() :
     
     get_results = st.button("Get Results", type="secondary")
 
-    if get_results :
-        pass
+    if get_results and leaderboard_dict :
+        score_checker.main()
+        st.switch_page("pages/slideshow_result.py")
 
 # Currently: Countdown for error handling - will later implement it for countdown before capture
 def countdown():
