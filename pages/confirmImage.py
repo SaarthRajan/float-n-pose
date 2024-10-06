@@ -29,7 +29,7 @@ def confirmImage(path):
         #     st.image(path)
         # else :
         #     st.image("./images/Sample.png")
-        st.image("./images/temp.jpg")
+        st.image("./images/temp.png", channels="BGR")
 
     # displays the details the user has to enter
     with cols[1] :
@@ -68,4 +68,4 @@ def confirmImage(path):
         
 
 
-confirmImage("images/temp.jpg")
+confirmImage("images/temp.png")

@@ -30,8 +30,8 @@ leaderboard_dict = {
 }
 
 image_directory = "./images"
-image_path = "./images/temp.jpg"
-image_name = "temp.jpg"
+image_path = "./images/temp.png"
+image_name = "temp.png"
 
 def leaderboard() :
 
@@ -73,8 +73,8 @@ def webcam() :
             break
         
         # convert to RGB format - supported by streamlit and display it
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        frame_placeholder.image(frame,channels="RGB")
+        frame_new = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        frame_placeholder.image(frame_new)
 
         if capture_button :
             os.chdir(image_directory)
