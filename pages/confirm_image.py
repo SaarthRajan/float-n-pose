@@ -1,5 +1,9 @@
 import streamlit as st
 import os
+import time
+import shutil
+import tempfile
+from info import leaderboard_dict
 
 # Set Page Config -> title, logo, layout (centred by default)
 st.set_page_config(
@@ -13,6 +17,8 @@ def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 local_css("Styles/styles.css")
+
+image_directory = "./images/"
 
 def confirmImage(path):
 
@@ -33,7 +39,7 @@ def confirmImage(path):
         # st.image(path, channels="BGR")
 
         with st.empty() :
-            st.image(path, channels="BGR")
+            st.image(path, channels="RGB")
         
 
     # displays the details the user has to enter
@@ -41,16 +47,23 @@ def confirmImage(path):
         username = st.text_input("Enter Your Name Here")
         insideColumns = st.columns(2)
         with insideColumns[0] :
-            retake_button = st.button("Retake")
+            retake_button = st.button("Retake", type="secondary")
         with insideColumns[1] :
-            confirm_button = st.button("Confirm")
+            confirm_button = st.button("Confirm", type="primary")
 
         # Actions after button is pushed - Subject to Change
 
         if confirm_button :
             if username :
                 st.write(f"Username is {username}")
-                # st.switch_page("float-n-pose.py")
+                temp_image_path = tempfile.NamedTemporaryFile(delete=False, suffix='.jpg').name
+                shutil.move(path, temp_image_path)
+                os.rename(temp_image_path, f"{image_directory}{username}.jpg")
+
+                if username not in leaderboard_dict :
+                    leaderboard_dict[username] = 40
+
+                st.switch_page("float_n_pose.py")
             else :
                 st.write("Kindly Enter the username")
 
@@ -59,12 +72,12 @@ def confirmImage(path):
             st.write("You are not choosing this image")
             
             if os.path.exists(path):
-                os.unlink(path)
-                # os.remove(path)
+                os.remove(path)
+                time.sleep(0.1)
             
             st.switch_page("float_n_pose.py")
 
         
 
 
-confirmImage("./images/temp.png")
+confirmImage("./images/temp.jpg")
