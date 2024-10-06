@@ -32,9 +32,8 @@ def confirmImage(path):
         # if os.path.exists(path):
         # st.image(path, channels="BGR")
 
-        image_holder = st.empty()
-
-        image_holder.image(path, channels="BGR")
+        with st.empty() :
+            st.image(path, channels="BGR")
         
 
     # displays the details the user has to enter
@@ -42,9 +41,9 @@ def confirmImage(path):
         username = st.text_input("Enter Your Name Here")
         insideColumns = st.columns(2)
         with insideColumns[0] :
-            confirm_button = st.button("Confirm")
-        with insideColumns[1] :
             retake_button = st.button("Retake")
+        with insideColumns[1] :
+            confirm_button = st.button("Confirm")
 
         # Actions after button is pushed - Subject to Change
 
@@ -60,7 +59,8 @@ def confirmImage(path):
             st.write("You are not choosing this image")
             
             if os.path.exists(path):
-                os.remove(path)
+                os.unlink(path)
+                # os.remove(path)
             
             st.switch_page("float_n_pose.py")
 

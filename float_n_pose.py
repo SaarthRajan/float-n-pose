@@ -2,6 +2,7 @@ import streamlit as st
 import cv2
 import os
 import time
+import tempfile
 
 # pg = st.navigation([st.Page("pages\confirm_image.py")], position="hidden")
 
@@ -72,8 +73,9 @@ def webcam() :
     # Feed is accessed till in this loop
     while cap.isOpened():
 
-        if os.path.exists(image_path):
-            os.remove(image_path)
+        # if os.path.exists(image_path):
+        #     # os.remove(image_path)
+        #     os.unlink(image_path)
 
         
         ret, frame = cap.read()
@@ -89,19 +91,27 @@ def webcam() :
 
         if capture_button :
 
-            if os.path.exists(image_path):
-                os.remove(image_path)
-
             countdown()
 
-            if os.path.exists(image_path):
-                os.remove(image_path)
+            temp_image_path = tempfile.NamedTemporaryFile(delete=False, suffix='.png').name
 
-            cv2.imwrite(image_path, frame)
+            if cv2.imwrite(temp_image_path, frame) :
+                if os.path.exists(image_path) :
+                    os.remove(image_path)
+                    time.sleep(0.1)
 
-            captured = True
-            
-            break
+                os.rename(temp_image_path, image_path)
+                captured = True
+                break
+            else :
+                st.write("There was an error, Kindly try again")
+
+
+            # if os.path.exists(image_path):
+            #     # os.remove(image_path)
+            #     os.unlink(image_path)
+
+            # cv2.imwrite(image_path, frame)
 
         # if cv2.waitKey(1) & 0xFF == ord("q"):
         #     break
