@@ -2,7 +2,10 @@ import streamlit as st
 import cv2
 import os
 import time
-import tempfile
+import numpy as np
+from info import leaderboard_dict
+from info import theme
+
 
 # pg = st.navigation([st.Page("pages\confirm_image.py")], position="hidden")
 
@@ -10,56 +13,57 @@ import tempfile
 st.set_page_config(
     page_title="Float n Pose", 
     page_icon="🪐",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="collapsed" # hiding the sidebar
 )
 
-# Used to remove the streamlit branding
+# Used to remove the streamlit branding - and format other stuff (also check configure.toml for theme)
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 local_css("Styles/styles.css")
 
-st.title(":blue[Float n Pose]")
+# to center the image
+cols = st.columns(4)
+with cols[1]:
+    # space apps logo
+    st.image("./space_apps_logo.png", width=300)
 
-# Dummy Leaderboard Data - initialise to empty dictionary when
-# Contains in form of key value pairs of username and score 
-# To Do - store it in a panda data frame and then display it after sorting
-leaderboard_dict = {
-    "User1": 10,
-    "User2": 20,
-    "User3": 40,
-    "User4": 5,
-    "User5": 60,
-}
+st.title(":blue[Float n Pose 🧑🏼‍🚀]")
 
 image_directory = "./images"
-image_path = "./images/temp.png"
-image_name = "temp.png"
+image_path = "./images/temp.jpg"
 
 def leaderboard() :
 
+    # sort in decreasing order based on their scores
     sortedLeaderBoard = sorted(leaderboard_dict.items(), key=lambda x:x[1], reverse=True)
 
     st.header("Leaderboard")
 
-    # Print the leaderboard
+    # Print the leaderboard in table format
     for user in sortedLeaderBoard :
         # st.write(user + ": " + str(leaderboard[user]))
         cols = st.columns(2)
         cols[0].write(user[0])
         cols[1].write(str(user[1]))
 
+# Currently: Countdown for error handling - will later implement it for countdown before capture
 def countdown():
     with st.empty() :
         for i in range(1, 4) :
-            st.header(str(i))
-            time.sleep(1)
+            st.header(str(4 - i))
+            time.sleep(0.7)
 
 def webcam() :
-
+    # bool when captured
     captured = False
 
     st.header("Webcam")
+
+    if theme:
+        st.header(f"The pose of the day is {theme}")
+    else :
+        st.write("To start the game, capture a photo")
     
     # Initialise cap - Captures video frames from webcam 0. 
     cap = cv2.VideoCapture(0)
@@ -68,15 +72,12 @@ def webcam() :
     frame_placeholder = st.empty()
 
     # Capture Button
-    capture_button = st.button("Capture")
+    capture_button = st.button("Capture", type="primary")
+
+    st.write("If the image is not rendered properly, click on capture again :)")
 
     # Feed is accessed till in this loop
     while cap.isOpened():
-
-        # if os.path.exists(image_path):
-        #     # os.remove(image_path)
-        #     os.unlink(image_path)
-
         
         ret, frame = cap.read()
 
@@ -91,30 +92,18 @@ def webcam() :
 
         if capture_button :
 
-            countdown()
+            countdown() # for errors
 
-            temp_image_path = tempfile.NamedTemporaryFile(delete=False, suffix='.png').name
+            # to brighten the image
+            intensity = np.ones(frame.shape, dtype="uint8") * 60
+            image_bright = cv2.add(frame, intensity)
 
-            if cv2.imwrite(temp_image_path, frame) :
-                if os.path.exists(image_path) :
-                    os.remove(image_path)
-                    time.sleep(0.1)
+            # write to image path
+            cv2.imwrite(image_path, image_bright)
 
-                os.rename(temp_image_path, image_path)
-                captured = True
-                break
-            else :
-                st.write("There was an error, Kindly try again")
+            captured = True
 
-
-            # if os.path.exists(image_path):
-            #     # os.remove(image_path)
-            #     os.unlink(image_path)
-
-            # cv2.imwrite(image_path, frame)
-
-        # if cv2.waitKey(1) & 0xFF == ord("q"):
-        #     break
+            break
     
     # release and destroy (destructor)
     cap.release()
@@ -126,7 +115,7 @@ def webcam() :
 
 # Webcam Test
 def main() :
-    col1, col2 = st.columns([2, 1], gap="large", vertical_alignment="center")
+    col1, col2 = st.columns([2, 1], gap="large") #, vertical_alignment="center"
 
     with col2 :
         leaderboard()
