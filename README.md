@@ -1,4 +1,4 @@
-# float-n-pose
+# Float n Pose - Created in 36 hours
 float n pose !!
 
 ## Setup
@@ -16,3 +16,9 @@ pip install -r requirements.txt
 ## To run the app, use the following command
 
 streamlit run float_n_pose.py
+
+## Note:
+To avoid bugs, if you are prompted to enter username and you are a host, enter "host" as the username
+
+# Team Members
+Saarth, Rishi, Seth, Rithika
