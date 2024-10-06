@@ -1,5 +1,5 @@
 # Float n Pose - Created in 36 hours
-float n pose !!
+Created for Nasa Space Apps Challenge 2024 (University of Waterloo)
 
 ## Setup
 
