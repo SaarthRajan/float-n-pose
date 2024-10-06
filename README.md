@@ -15,4 +15,4 @@ pip install -r requirements.txt
 
 ## To run the app, use the following command
 
-streamlit run float-n-pose.py
+streamlit run float_n_pose.py
