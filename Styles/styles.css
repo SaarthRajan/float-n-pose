@@ -9,3 +9,7 @@ header {visibility: hidden;}
     padding-left: 0rem;
     padding-right: 0rem;
 }
+
+* {
+    text-align: center;
+}
