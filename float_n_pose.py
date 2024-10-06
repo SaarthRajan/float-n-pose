@@ -21,6 +21,7 @@ def local_css(file_name):
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 local_css("Styles/styles.css")
 
+st.image("./space_apps_logo.png", width=570)
 st.title(":blue[Float n Pose]")
 
 image_directory = "./images"
